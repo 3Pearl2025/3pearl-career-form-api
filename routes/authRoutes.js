@@ -7,7 +7,8 @@ const router = express.Router();
 
 router.post("/register", register);
 router.post("/login", validateLogin, login);
-router.post("/logout", logout);
+
+router.post("/logout", protect, logout);
 
 // Example of protected route
 router.get("/profile", protect, (req, res) => {

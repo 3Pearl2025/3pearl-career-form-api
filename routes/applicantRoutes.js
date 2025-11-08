@@ -10,6 +10,7 @@ import {
   applicantValidationRules,
   validateApplicant,
 } from "../middleware/validateApplicant.js";
+import { protect } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
@@ -22,12 +23,12 @@ router.post(
 );
 
 // GET - list all applicants
-router.get("/", getApplicants);
+router.get("/", protect, getApplicants);
 
 // DELETE - remove applicant by ID
-router.delete("/:id", deleteApplicant);
+router.delete("/:id", protect, deleteApplicant);
 
 // PATCH - update status
-router.patch("/:id/status", updateApplicantStatus);
+router.patch("/:id/status", protect, updateApplicantStatus);
 
 export default router;
