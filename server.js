@@ -32,6 +32,11 @@ app.use(requestLogger);
 // Connect Database
 connectDB();
 
+// --- Add this health route ---
+app.get("/health", (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 // 🔗 Register Routes
 app.use("/api/applicants", applicantRoutes);
 app.use("/api/logs", logRoutes);
