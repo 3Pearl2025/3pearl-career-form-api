@@ -19,7 +19,18 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Middleware
-app.use(cors({ origin: "http://localhost:4000", credentials: true }));
+app.use(
+  cors({
+    origin: [
+      "http://localhost:4000",
+      "http://localhost:3000",
+      "http://192.168.1.119:3000",
+      "http://192.168.1.119:4000",
+    ],
+    credentials: true,
+  })
+);
+
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));

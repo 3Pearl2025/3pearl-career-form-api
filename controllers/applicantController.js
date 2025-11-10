@@ -5,7 +5,7 @@ export const createApplicant = async (req, res) => {
     const { name, position, city } = req.body;
 
     const cvUrl = req.file
-      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
+      ? `${req.protocol}://${process.env.API_HOST}/uploads/${req.file.filename}`
       : null;
 
     const applicant = new Applicant({
