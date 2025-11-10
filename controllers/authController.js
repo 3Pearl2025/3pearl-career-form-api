@@ -36,7 +36,6 @@ export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
     const user = await User.findOne({ email });
-    console.log("🚀 ~ login ~ user:", user);
 
     if (!user || !(await user.comparePassword(password))) {
       return res

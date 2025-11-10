@@ -18,7 +18,7 @@ async function logRateLimit(req, message) {
 // Create general API limiter with logging
 export const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 500, // TODO: Change this to 100
+  max: 100, // TODO: Change this to 100
   handler: async (req, res, next) => {
     const msg = "Too many requests from this IP. Please try again later.";
     await logRateLimit(req, msg);
@@ -31,7 +31,7 @@ export const apiLimiter = rateLimit({
 // Create login limiter with stricter rules and logging
 export const loginLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 5,
+  max: 25,
   handler: async (req, res, next) => {
     const msg = "Too many login attempts. Please try again after 15 minutes.";
     await logRateLimit(req, msg);

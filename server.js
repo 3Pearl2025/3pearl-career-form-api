@@ -9,16 +9,23 @@ import logRoutes from "./routes/logRoutes.js";
 import authRoutes from "./routes/authRoutes.js";
 import { apiLimiter, loginLimiter } from "./middleware/rateLimitLogger.js";
 import cookieParser from "cookie-parser";
+import { mongoSanitizeCustom } from "./middleware/mongoSanitize.js";
+import { fileURLToPath } from "url";
 
 dotenv.config();
 const app = express();
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 // Middleware
 app.use(cors({ origin: "http://localhost:4000", credentials: true }));
-// app.use(express.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 app.use(cookieParser());
+
+app.use(mongoSanitizeCustom);
 
 // Apply general limit to all routes
 app.use("/api/", apiLimiter);
@@ -31,6 +38,25 @@ app.use(requestLogger);
 
 // Connect Database
 connectDB();
+
+// Serve static files with proper URL decoding
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// OR if you want more control, use a custom route:
+app.get("/uploads/:filename", (req, res) => {
+  try {
+    const filename = decodeURIComponent(req.params.filename);
+    const filePath = path.join(__dirname, "uploads", filename);
+
+    res.sendFile(filePath, (err) => {
+      if (err) {
+        res.status(404).send("File not found");
+      }
+    });
+  } catch (error) {
+    res.status(400).send("Invalid filename");
+  }
+});
 
 // --- Add this health route ---
 app.get("/health", (req, res) => {
