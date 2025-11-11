@@ -13,7 +13,7 @@ export const createApplicant = async (req, res) => {
         .json({ success: false, message: "Captcha failed" });
 
     const cvUrl = req.file
-      ? `${req.protocol}://${process.env.API_HOST}/uploads/${req.file.filename}`
+      ? `${req.protocol}://${req.get("host")}/uploads/${req.file.filename}`
       : null;
 
     const applicant = new Applicant({
