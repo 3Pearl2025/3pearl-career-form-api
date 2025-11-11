@@ -1,8 +1,16 @@
+import { verifyCaptcha } from "../lib/verifyCaptcha.js";
 import Applicant from "../models/Applicant.js";
 
 export const createApplicant = async (req, res) => {
   try {
-    const { name, position, city } = req.body;
+    const { name, position, city, captchaToken } = req.body;
+
+    const isHuman = await verifyCaptcha(captchaToken);
+
+    if (!isHuman)
+      return res
+        .status(400)
+        .json({ success: false, message: "Captcha failed" });
 
     const cvUrl = req.file
       ? `${req.protocol}://${process.env.API_HOST}/uploads/${req.file.filename}`

@@ -1,12 +1,5 @@
-import jwt from "jsonwebtoken";
+import { generateToken } from "../lib/generateToken.js";
 import User from "../models/User.js";
-
-// Generate JWT token
-const generateToken = (user) => {
-  return jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-    expiresIn: "7d",
-  });
-};
 
 // 🟢 REGISTER
 export const register = async (req, res) => {
