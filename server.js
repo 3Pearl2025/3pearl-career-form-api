@@ -11,6 +11,7 @@ import { apiLimiter, loginLimiter } from "./middleware/rateLimitLogger.js";
 import cookieParser from "cookie-parser";
 import { mongoSanitizeCustom } from "./middleware/mongoSanitize.js";
 import { fileURLToPath } from "url";
+import helmet from "helmet";
 
 dotenv.config();
 const app = express();
@@ -30,7 +31,7 @@ app.use(
     credentials: true,
   })
 );
-
+app.use(helmet);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
